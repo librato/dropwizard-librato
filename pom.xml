@@ -29,6 +29,14 @@
         <developerConnection>scm:git:git@github.com:librato/dropwizard-librato.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+    <developers>
+        <developer>
+            <id>collinvandyck</id>
+            <name>Collin Van Dyck</name>
+            <email>collin@librato.com</email>
+            <timezone>-8</timezone>
+        </developer>
+    </developers>
     <build>
         <pluginManagement>
             <plugins>
