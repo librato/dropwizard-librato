@@ -48,11 +48,16 @@ public class LibratoReporterFactory extends BaseReporterFactory {
 
     @JsonProperty
     @NotNull
-    private Duration frequency = Duration.seconds(60);
+    private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
 
     @Override
     public Optional<Duration> getFrequency() {
-        return Optional.of(frequency);
+        return frequency;
+    }
+
+    @Override
+    public void setFrequency(Optional<Duration> frequency) {
+        this.frequency = frequency;
     }
 
     public ScheduledReporter build(MetricRegistry registry) {
