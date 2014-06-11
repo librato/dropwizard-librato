@@ -4,9 +4,11 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.base.Optional;
 import com.librato.metrics.HttpPoster;
 import com.librato.metrics.LibratoReporter;
 import com.librato.metrics.NingHttpPoster;
+import io.dropwizard.util.Duration;
 
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +45,15 @@ public class LibratoReporterFactory extends BaseReporterFactory {
 
     @JsonProperty
     private String prefixDelimiter;
+
+    @JsonProperty
+    @NotNull
+    private Duration frequency = Duration.seconds(60);
+
+    @Override
+    public Optional<Duration> getFrequency() {
+        return Optional.of(frequency);
+    }
 
     public ScheduledReporter build(MetricRegistry registry) {
         LibratoReporter.Builder builder = LibratoReporter.builder(registry, username, token, source)
