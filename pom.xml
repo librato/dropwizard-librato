@@ -7,8 +7,16 @@
     <artifactId>dropwizard-librato</artifactId>
     <version>0.7.0.0-SNAPSHOT</version>
     <name>Metrics Librato Dropwizard Support</name>
+    <url>https://github.com/librato/dropwizard-librato</url>
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <description>
-        Dropwizard integration with metrics-librato
+        Dropwizard integration with Librato Metrics
     </description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,9 +24,9 @@
         <dropwizard.metrics.version>0.7.0</dropwizard.metrics.version>
     </properties>
     <scm>
-        <url>https://github.com/librato/metrics-librato</url>
-        <connection>scm:git:git@github.com:librato/metrics-librato.git</connection>
-        <developerConnection>scm:git:git@github.com:librato/metrics-librato.git</developerConnection>
+        <url>https://github.com/librato/dropwizard-librato</url>
+        <connection>scm:git:git@github.com:librato/dropwizard-librato.git</connection>
+        <developerConnection>scm:git:git@github.com:librato/dropwizard-librato.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     <build>
