@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.librato.metrics</groupId>
-    <artifactId>dropwizard-librato</artifactId>
+    <artifactId>dropwizard-metrics-librato</artifactId>
     <version>0.7.0.2-SNAPSHOT</version>
     <name>Metrics Librato Dropwizard Support</name>
     <url>https://github.com/librato/dropwizard-librato</url>
