@@ -22,7 +22,7 @@ Next, add a `metrics` configuration element to your YAML config file:
       reporters:
         - type: librato
           username: "<Librato Email>"
-          token: "<Librato API Token>""
+          token: "<Librato API Token>"
           source: "<Source Identifier (usually hostname)>"
           timeout: [optional (int), number of seconds, defaults to 5]
           prefix: [optional (string), prepended to metric names]
