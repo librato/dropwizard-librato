@@ -47,6 +47,9 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     private String prefixDelimiter;
 
     @JsonProperty
+    private Boolean deleteIdleStats;
+
+    @JsonProperty
     @NotNull
     private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
 
@@ -84,6 +87,9 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         }
         if (prefixDelimiter != null) {
             builder.setPrefix(prefixDelimiter);
+        }
+        if (deleteIdleStats != null) {
+            builder.setDeleteIdleStats(deleteIdleStats);
         }
         return builder.build();
     }
