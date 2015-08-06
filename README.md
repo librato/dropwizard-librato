@@ -1,6 +1,6 @@
 ## Overview
 
-This project provides an easy way to send metrics from your Dropwizard 0.7 project to Librato. 
+This project provides an easy way to send metrics from your Dropwizard 0.7 project to Librato.
 
 ## Usage
 
@@ -13,9 +13,9 @@ First, add the `metrics-librato-dropwizard` dependency in your POM:
     <dependency>
         <groupId>com.librato.metrics</groupId>
         <artifactId>dropwizard-metrics-librato</artifactId>
-        <version>0.7.0.6</version>
+        <version>0.7.0.7</version>
     </dependency>
-    
+
 Next, add a `metrics` configuration element to your YAML config file:
 
     metrics:
@@ -27,8 +27,8 @@ Next, add a `metrics` configuration element to your YAML config file:
           timeout: [optional (int), number of seconds, defaults to 5]
           prefix: [optional (string), prepended to metric names]
           name: [optional (string), name of the reporter]
-          
-          
+
+
 That's it.  Once your application starts, your metrics should soon appear in Librato.
 
 ## Notes
