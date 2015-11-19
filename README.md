@@ -1,6 +1,6 @@
 ## Overview
 
-This project provides an easy way to send metrics from your Dropwizard 0.7 project to Librato.
+This project provides an easy way to send metrics from your [Dropwizard](https://dropwizard.github.io/metrics/3.1.0/) 0.7 project to Librato.
 
 ## Usage
 
