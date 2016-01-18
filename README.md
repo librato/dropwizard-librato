@@ -10,6 +10,24 @@ data to Librato.
 
 First, add the `metrics-librato-dropwizard` dependency in your POM:
 
+### Dropwizard 9.x
+
+    <dependency>
+        <groupId>com.librato.metrics</groupId>
+        <artifactId>dropwizard-metrics-librato</artifactId>
+        <version>0.9.1.0</version>
+    </dependency>
+
+### Dropwizard 8.x
+
+    <dependency>
+        <groupId>com.librato.metrics</groupId>
+        <artifactId>dropwizard-metrics-librato</artifactId>
+        <version>0.8.5.0</version>
+    </dependency>
+
+### Dropwizard 7.x
+
     <dependency>
         <groupId>com.librato.metrics</groupId>
         <artifactId>dropwizard-metrics-librato</artifactId>
