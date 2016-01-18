@@ -18,6 +18,16 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <repositories>
+        <repository>
+            <id>librato-releases</id>
+            <url>https://maven.librato.com/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>librato-snapshots</id>
+            <url>https://maven.librato.com/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
     <description>
         Dropwizard integration with Librato Metrics
     </description>
