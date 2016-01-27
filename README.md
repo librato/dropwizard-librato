@@ -1,6 +1,6 @@
 ## Overview
 
-This project provides an easy way to send metrics from your Dropwizard 0.7 project to Librato.
+This project provides an easy way to send metrics from your Dropwizard project to Librato.
 
 ## Usage
 
@@ -15,7 +15,7 @@ First, add the `metrics-librato-dropwizard` dependency in your POM:
     <dependency>
         <groupId>com.librato.metrics</groupId>
         <artifactId>dropwizard-metrics-librato</artifactId>
-        <version>0.9.1.0</version>
+        <version>0.9.1.1</version>
     </dependency>
 
 ### Dropwizard 8.x
