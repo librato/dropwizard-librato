@@ -5,9 +5,9 @@ import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
+import com.librato.metrics.DefaultHttpPoster;
 import com.librato.metrics.HttpPoster;
 import com.librato.metrics.LibratoReporter;
-import com.librato.metrics.NingHttpPoster;
 import io.dropwizard.util.Duration;
 
 import javax.validation.constraints.NotNull;
@@ -73,7 +73,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
             builder.setSourceRegex(sourceRegexPattern);
         }
         if (libratoUrl != null) {
-            HttpPoster httpPoster = NingHttpPoster.newPoster(username, token, libratoUrl);
+            HttpPoster httpPoster = new DefaultHttpPoster(libratoUrl, username, token);
             builder.setHttpPoster(httpPoster);
         }
         if (prefix != null) {
