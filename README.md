@@ -31,7 +31,7 @@ First, add the `metrics-librato-dropwizard` dependency in your POM:
     <dependency>
         <groupId>com.librato.metrics</groupId>
         <artifactId>dropwizard-metrics-librato</artifactId>
-        <version>0.7.0.8</version>
+        <version>0.7.0.9</version>
     </dependency>
 
 Next, add a `metrics` configuration element to your YAML config file:
