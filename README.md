@@ -23,7 +23,7 @@ First, add the `metrics-librato-dropwizard` dependency in your POM:
     <dependency>
         <groupId>com.librato.metrics</groupId>
         <artifactId>dropwizard-metrics-librato</artifactId>
-        <version>0.8.5.0</version>
+        <version>0.8.5.1</version>
     </dependency>
 
 ### Dropwizard 7.x
