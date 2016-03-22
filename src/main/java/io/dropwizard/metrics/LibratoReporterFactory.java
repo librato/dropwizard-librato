@@ -9,13 +9,18 @@ import com.librato.metrics.HttpPoster;
 import com.librato.metrics.LibratoReporter;
 import com.librato.metrics.NingHttpPoster;
 import io.dropwizard.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 @JsonTypeName("librato")
 public class LibratoReporterFactory extends BaseReporterFactory {
+    private static final Logger log = LoggerFactory.getLogger(LibratoReporterFactory.class);
+
     @NotNull
     @JsonProperty
     private String username;
@@ -52,6 +57,14 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     @JsonProperty
     @NotNull
     private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
+
+    @JsonProperty
+    @NotNull
+    private List<String> metricWhitelist = Collections.emptyList();
+
+    @JsonProperty
+    @NotNull
+    private List<String> metricBlacklist = Collections.emptyList();
 
     @Override
     public Optional<Duration> getFrequency() {
@@ -91,7 +104,40 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         if (deleteIdleStats != null) {
             builder.setDeleteIdleStats(deleteIdleStats);
         }
+        if (!metricWhitelist.isEmpty() && !metricBlacklist.isEmpty()) {
+            log.error("Both whitelist and blacklist cannot be supplied");
+        } else {
+            try {
+                if (!metricWhitelist.isEmpty()) {
+                    Set<LibratoReporter.ExpandedMetric> expandedWhitelist = toExpandedMetric(metricWhitelist);
+                    builder.setExpansionConfig(new LibratoReporter.MetricExpansionConfig(expandedWhitelist));
+                    log.info("Set metric whitelist to {}", expandedWhitelist);
+                } else if (!metricBlacklist.isEmpty()) {
+                    EnumSet<LibratoReporter.ExpandedMetric> all = EnumSet.allOf(LibratoReporter.ExpandedMetric.class);
+                    Set<LibratoReporter.ExpandedMetric> expandedBlacklist = toExpandedMetric(metricBlacklist);
+                    Set<LibratoReporter.ExpandedMetric> expandedWhitelist = new HashSet<LibratoReporter.ExpandedMetric>();
+                    for (LibratoReporter.ExpandedMetric metric : all) {
+                        if (!expandedBlacklist.contains(metric)) {
+                            expandedWhitelist.add(metric);
+                        }
+                    }
+                    builder.setExpansionConfig(new LibratoReporter.MetricExpansionConfig(expandedWhitelist));
+                    log.info("Set metric whitelist to {}", expandedWhitelist);
+                }
+            } catch (Exception e) {
+                log.error("Could not process whitelist / blacklist", e);
+            }
+        }
         return builder.build();
+    }
+
+    private Set<LibratoReporter.ExpandedMetric> toExpandedMetric(List<String> names) {
+        Set<LibratoReporter.ExpandedMetric> result = new HashSet<LibratoReporter.ExpandedMetric>();
+        for (String name : names) {
+            name = name.toUpperCase();
+            result.add(LibratoReporter.ExpandedMetric.valueOf(name));
+        }
+        return result;
     }
 }
 
