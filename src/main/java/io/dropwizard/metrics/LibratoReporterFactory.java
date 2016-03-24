@@ -77,6 +77,16 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     }
 
     public ScheduledReporter build(MetricRegistry registry) {
+        if (source == null) {
+            source = System.getenv("LIBRATO_SOURCE");
+        }
+        if (username == null) {
+            username = System.getenv("LIBRATO_USERNAME");
+        }
+        if (token == null) {
+            token = System.getenv("LIBRATO_TOKEN");
+        }
+
         LibratoReporter.Builder builder = LibratoReporter.builder(registry, username, token, source)
                 .setRateUnit(getRateUnit())
                 .setDurationUnit(getDurationUnit())
