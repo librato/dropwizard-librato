@@ -49,6 +49,12 @@ Next, add a `metrics` configuration element to your YAML config file:
 
 That's it.  Once your application starts, your metrics should soon appear in Librato.
 
+## Environment Variables
+
+If you wish to not have your username, token, or source in the configuration,
+you can alternatively supply them by setting the `LIBRATO_USERNAME`,
+`LIBRATO_TOKEN`, and `LIBRATO_SOURCE` environment variables, respectively
+
 ## Whitelist / Blacklist
 
 By default, all expanded metrics (percentiles, rates) are submitted for each Timer, Histogram,
