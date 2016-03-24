@@ -21,15 +21,12 @@ import java.util.regex.Pattern;
 public class LibratoReporterFactory extends BaseReporterFactory {
     private static final Logger log = LoggerFactory.getLogger(LibratoReporterFactory.class);
 
-    @NotNull
     @JsonProperty
     private String username;
 
-    @NotNull
     @JsonProperty
     private String token;
 
-    @NotNull
     @JsonProperty
     private String source;
 
