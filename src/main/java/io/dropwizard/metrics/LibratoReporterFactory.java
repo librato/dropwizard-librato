@@ -4,7 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.librato.metrics.DefaultHttpPoster;
 import com.librato.metrics.HttpPoster;
 import com.librato.metrics.LibratoReporter;

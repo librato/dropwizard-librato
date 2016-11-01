@@ -8,13 +8,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.librato.metrics</groupId>
     <artifactId>dropwizard-metrics-librato</artifactId>
-    <version>0.9.1.6-SNAPSHOT</version>
+    <version>1.0.3.0-SNAPSHOT</version>
     <name>Metrics Librato Dropwizard Support</name>
     <url>https://github.com/librato/dropwizard-librato</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <metrics.librato.version>4.1.2.5</metrics.librato.version>
-        <dropwizard.metrics.version>0.9.1</dropwizard.metrics.version>
+        <dropwizard.metrics.version>1.0.3</dropwizard.metrics.version>
     </properties>
     <licenses>
         <license>
@@ -53,6 +53,15 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -97,6 +106,7 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-metrics</artifactId>
             <version>${dropwizard.metrics.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.librato.metrics</groupId>
