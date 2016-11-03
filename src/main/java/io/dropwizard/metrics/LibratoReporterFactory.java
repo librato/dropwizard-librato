@@ -5,9 +5,10 @@ import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
-import com.librato.metrics.DefaultHttpPoster;
-import com.librato.metrics.HttpPoster;
-import com.librato.metrics.LibratoReporter;
+import com.librato.metrics.ExpandedMetric;
+import com.librato.metrics.MetricExpansionConfig;
+import com.librato.metrics.reporter.LibratoMetricsReporter;
+import com.librato.metrics.reporter.ReporterBuilder;
 import io.dropwizard.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 @JsonTypeName("librato")
 public class LibratoReporterFactory extends BaseReporterFactory {
@@ -84,65 +84,64 @@ public class LibratoReporterFactory extends BaseReporterFactory {
             token = System.getenv("LIBRATO_TOKEN");
         }
 
-        LibratoReporter.Builder builder = LibratoReporter.builder(registry, username, token, source)
-                .setRateUnit(getRateUnit())
-                .setDurationUnit(getDurationUnit())
-                .setFilter(getFilter());
+        ReporterBuilder reporterBuilder = LibratoMetricsReporter.builder(registry, username, token);
+        reporterBuilder.setRateUnit(getRateUnit());
+        reporterBuilder.setDurationUnit(getDurationUnit());
+        reporterBuilder.setFilter(getFilter());
         if (sourceRegex != null) {
-            Pattern sourceRegexPattern = Pattern.compile(sourceRegex);
-            builder.setSourceRegex(sourceRegexPattern);
-        }
-        if (libratoUrl != null) {
-            HttpPoster httpPoster = new DefaultHttpPoster(libratoUrl, username, token);
-            builder.setHttpPoster(httpPoster);
-        }
-        if (prefix != null) {
-            builder.setPrefix(prefix);
+            reporterBuilder.setSourceRegex(sourceRegex);
         }
         if (name != null) {
-            builder.setName(name);
+            reporterBuilder.setName(name);
         }
-        if (timeout != null) {
-            builder.setTimeout(timeout, TimeUnit.SECONDS);
+        if (libratoUrl != null) {
+            reporterBuilder.setUrl(libratoUrl);
+        }
+        if (prefix != null) {
+            reporterBuilder.setPrefix(prefix);
         }
         if (prefixDelimiter != null) {
-            builder.setPrefix(prefixDelimiter);
+            reporterBuilder.setPrefixDelimiter(prefixDelimiter);
+        }
+        if (timeout != null) {
+            reporterBuilder.setTimeout(timeout, TimeUnit.SECONDS);
         }
         if (deleteIdleStats != null) {
-            builder.setDeleteIdleStats(deleteIdleStats);
+            reporterBuilder.setDeleteIdleStats(deleteIdleStats);
         }
         if (!metricWhitelist.isEmpty() && !metricBlacklist.isEmpty()) {
             log.error("Both whitelist and blacklist cannot be supplied");
         } else {
             try {
                 if (!metricWhitelist.isEmpty()) {
-                    Set<LibratoReporter.ExpandedMetric> expandedWhitelist = toExpandedMetric(metricWhitelist);
-                    builder.setExpansionConfig(new LibratoReporter.MetricExpansionConfig(expandedWhitelist));
+                    Set<ExpandedMetric> expandedWhitelist = toExpandedMetric(metricWhitelist);
+                    reporterBuilder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
                     log.info("Set metric whitelist to {}", expandedWhitelist);
                 } else if (!metricBlacklist.isEmpty()) {
-                    EnumSet<LibratoReporter.ExpandedMetric> all = EnumSet.allOf(LibratoReporter.ExpandedMetric.class);
-                    Set<LibratoReporter.ExpandedMetric> expandedBlacklist = toExpandedMetric(metricBlacklist);
-                    Set<LibratoReporter.ExpandedMetric> expandedWhitelist = new HashSet<LibratoReporter.ExpandedMetric>();
-                    for (LibratoReporter.ExpandedMetric metric : all) {
+                    EnumSet<ExpandedMetric> all = EnumSet.allOf(ExpandedMetric.class);
+                    Set<ExpandedMetric> expandedBlacklist = toExpandedMetric(metricBlacklist);
+                    Set<ExpandedMetric> expandedWhitelist = new HashSet<ExpandedMetric>();
+                    for (ExpandedMetric metric : all) {
                         if (!expandedBlacklist.contains(metric)) {
                             expandedWhitelist.add(metric);
                         }
                     }
-                    builder.setExpansionConfig(new LibratoReporter.MetricExpansionConfig(expandedWhitelist));
+                    reporterBuilder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
                     log.info("Set metric whitelist to {}", expandedWhitelist);
                 }
             } catch (Exception e) {
                 log.error("Could not process whitelist / blacklist", e);
             }
         }
-        return builder.build();
+
+        return reporterBuilder.build();
     }
 
-    private Set<LibratoReporter.ExpandedMetric> toExpandedMetric(List<String> names) {
-        Set<LibratoReporter.ExpandedMetric> result = new HashSet<LibratoReporter.ExpandedMetric>();
+    private Set<ExpandedMetric> toExpandedMetric(List<String> names) {
+        Set<ExpandedMetric> result = new HashSet<ExpandedMetric>();
         for (String name : names) {
             name = name.toUpperCase();
-            result.add(LibratoReporter.ExpandedMetric.valueOf(name));
+            result.add(ExpandedMetric.valueOf(name));
         }
         return result;
     }
