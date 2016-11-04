@@ -57,6 +57,9 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     @JsonProperty
     private Boolean enableMD;
 
+    @JsonProperty("tags")
+    private Tagging tagging = new Tagging();
+
     @JsonProperty
     @NotNull
     private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
@@ -94,6 +97,21 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         builder.setDurationUnit(getDurationUnit());
         builder.setFilter(getFilter());
         builder.setSource(source);
+        if (tagging != null) {
+            for (String name : tagging.staticTags.keySet()) {
+                String value = tagging.staticTags.get(name);
+                if (value != null && value.length() > 0) {
+                    builder.addTag(name, value);
+                }
+                builder.addTag(name, value);
+            }
+            for (String name : tagging.environmentTags.keySet()) {
+                String value = System.getenv(tagging.environmentTags.get(name));
+                if (value != null && value.length() > 0) {
+                    builder.addTag(name, value);
+                }
+            }
+        }
         if (enableSD != null) {
             builder.setEnableSD(enableSD);
         }
