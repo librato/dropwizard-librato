@@ -52,6 +52,12 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     private Boolean deleteIdleStats;
 
     @JsonProperty
+    private Boolean enableSD = true;
+
+    @JsonProperty
+    private Boolean enableMD;
+
+    @JsonProperty
     @NotNull
     private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
 
@@ -83,32 +89,37 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         if (token == null) {
             token = System.getenv("LIBRATO_TOKEN");
         }
-
-        ReporterBuilder reporterBuilder = LibratoMetricsReporter.builder(registry, username, token);
-        reporterBuilder.setRateUnit(getRateUnit());
-        reporterBuilder.setDurationUnit(getDurationUnit());
-        reporterBuilder.setFilter(getFilter());
-        reporterBuilder.setSource(source);
+        ReporterBuilder builder = LibratoMetricsReporter.builder(registry, username, token);
+        builder.setRateUnit(getRateUnit());
+        builder.setDurationUnit(getDurationUnit());
+        builder.setFilter(getFilter());
+        builder.setSource(source);
+        if (enableSD != null) {
+            builder.setEnableSD(enableSD);
+        }
+        if (enableMD != null) {
+            builder.setEnableMD(enableMD);
+        }
         if (sourceRegex != null) {
-            reporterBuilder.setSourceRegex(sourceRegex);
+            builder.setSourceRegex(sourceRegex);
         }
         if (name != null) {
-            reporterBuilder.setName(name);
+            builder.setName(name);
         }
         if (libratoUrl != null) {
-            reporterBuilder.setUrl(libratoUrl);
+            builder.setUrl(libratoUrl);
         }
         if (prefix != null) {
-            reporterBuilder.setPrefix(prefix);
+            builder.setPrefix(prefix);
         }
         if (prefixDelimiter != null) {
-            reporterBuilder.setPrefixDelimiter(prefixDelimiter);
+            builder.setPrefixDelimiter(prefixDelimiter);
         }
         if (timeout != null) {
-            reporterBuilder.setTimeout(timeout, TimeUnit.SECONDS);
+            builder.setTimeout(timeout, TimeUnit.SECONDS);
         }
         if (deleteIdleStats != null) {
-            reporterBuilder.setDeleteIdleStats(deleteIdleStats);
+            builder.setDeleteIdleStats(deleteIdleStats);
         }
         if (!metricWhitelist.isEmpty() && !metricBlacklist.isEmpty()) {
             log.error("Both whitelist and blacklist cannot be supplied");
@@ -116,7 +127,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
             try {
                 if (!metricWhitelist.isEmpty()) {
                     Set<ExpandedMetric> expandedWhitelist = toExpandedMetric(metricWhitelist);
-                    reporterBuilder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
+                    builder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
                     log.info("Set metric whitelist to {}", expandedWhitelist);
                 } else if (!metricBlacklist.isEmpty()) {
                     EnumSet<ExpandedMetric> all = EnumSet.allOf(ExpandedMetric.class);
@@ -127,7 +138,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
                             expandedWhitelist.add(metric);
                         }
                     }
-                    reporterBuilder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
+                    builder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
                     log.info("Set metric whitelist to {}", expandedWhitelist);
                 }
             } catch (Exception e) {
@@ -135,7 +146,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
             }
         }
 
-        return reporterBuilder.build();
+        return builder.build();
     }
 
     private Set<ExpandedMetric> toExpandedMetric(List<String> names) {
