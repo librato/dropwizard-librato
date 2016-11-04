@@ -88,6 +88,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         reporterBuilder.setRateUnit(getRateUnit());
         reporterBuilder.setDurationUnit(getDurationUnit());
         reporterBuilder.setFilter(getFilter());
+        reporterBuilder.setSource(source);
         if (sourceRegex != null) {
             reporterBuilder.setSourceRegex(sourceRegex);
         }
