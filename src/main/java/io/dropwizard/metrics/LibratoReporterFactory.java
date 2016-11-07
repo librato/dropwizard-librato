@@ -97,7 +97,8 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         builder.setDurationUnit(getDurationUnit());
         builder.setFilter(getFilter());
         builder.setSource(source);
-        if (tagging != null) {
+        if (tagging != null && tagging.enabled) {
+            builder.setEnableMD(true);
             for (String name : tagging.staticTags.keySet()) {
                 String value = tagging.staticTags.get(name);
                 if (value != null && value.length() > 0) {
@@ -112,12 +113,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
                 }
             }
         }
-        if (enableSD != null) {
-            builder.setEnableSD(enableSD);
-        }
-        if (enableMD != null) {
-            builder.setEnableMD(enableMD);
-        }
+        builder.setEnableMD(true); // for now.
         if (sourceRegex != null) {
             builder.setSourceRegex(sourceRegex);
         }

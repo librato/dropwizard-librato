@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Map;
 
 public class Tagging {
+    @JsonProperty("enabled")
+    public Boolean enabled = false;
     @JsonProperty("static")
     public Map<String, String> staticTags = Collections.emptyMap();
     @JsonProperty("environment")
