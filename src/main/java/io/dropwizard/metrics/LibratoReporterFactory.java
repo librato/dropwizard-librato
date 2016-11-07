@@ -52,10 +52,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     private Boolean deleteIdleStats;
 
     @JsonProperty
-    private Boolean enableSD = true;
-
-    @JsonProperty
-    private Boolean enableMD;
+    private Boolean enableLegacy = true;
 
     @JsonProperty("tags")
     private Tagging tagging = new Tagging();
@@ -114,10 +111,16 @@ public class LibratoReporterFactory extends BaseReporterFactory {
                 }
             }
         } else {
+            builder.setEnableTagging(false);
             log.info("Tagging is disabled");
         }
-        log.info("Legacy is enabled");
-        builder.setEnableLegacy(true); // for now.
+        if (enableLegacy) {
+            log.info("Legacy is enabled");
+            builder.setEnableLegacy(true);
+        } else {
+            log.info("Legacy is disabled");
+            builder.setEnableLegacy(false);
+        }
         if (sourceRegex != null) {
             builder.setSourceRegex(sourceRegex);
         }
