@@ -8,7 +8,7 @@ There are two steps. First, you must add the `dropwizard-metrics-librato` Maven 
 the application config YAML needs to be updated to configure the Librato Reporter, which will send your Metrics
 data to Librato.
 
-First, add the `metrics-librato-dropwizard` dependency in your POM:
+First, add the `dropwizard-metrics-librato` dependency in your POM:
 
 ### Dropwizard 1.0.x
 
