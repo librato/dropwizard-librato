@@ -5,9 +5,9 @@ import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
-import com.librato.metrics.ExpandedMetric;
-import com.librato.metrics.MetricExpansionConfig;
-import com.librato.metrics.reporter.LibratoMetricsReporter;
+import com.librato.metrics.reporter.ExpandedMetric;
+import com.librato.metrics.reporter.LibratoReporter;
+import com.librato.metrics.reporter.MetricExpansionConfig;
 import com.librato.metrics.reporter.ReporterBuilder;
 import io.dropwizard.util.Duration;
 import org.slf4j.Logger;
@@ -89,7 +89,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         if (token == null) {
             token = System.getenv("LIBRATO_TOKEN");
         }
-        ReporterBuilder builder = LibratoMetricsReporter.builder(registry, username, token);
+        ReporterBuilder builder = LibratoReporter.builder(registry, username, token);
         builder.setRateUnit(getRateUnit());
         builder.setDurationUnit(getDurationUnit());
         builder.setFilter(getFilter());
