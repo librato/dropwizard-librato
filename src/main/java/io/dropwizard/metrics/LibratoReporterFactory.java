@@ -5,9 +5,10 @@ import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.google.common.base.Optional;
-import com.librato.metrics.HttpPoster;
-import com.librato.metrics.LibratoReporter;
-import com.librato.metrics.NingHttpPoster;
+import com.librato.metrics.reporter.ExpandedMetric;
+import com.librato.metrics.reporter.LibratoReporter;
+import com.librato.metrics.reporter.MetricExpansionConfig;
+import com.librato.metrics.reporter.ReporterBuilder;
 import io.dropwizard.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 @JsonTypeName("librato")
 public class LibratoReporterFactory extends BaseReporterFactory {
@@ -52,6 +52,12 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     private Boolean deleteIdleStats;
 
     @JsonProperty
+    private Boolean enableLegacy = true;
+
+    @JsonProperty("tags")
+    private Tagging tagging = new Tagging();
+
+    @JsonProperty
     @NotNull
     private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
 
@@ -83,30 +89,55 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         if (token == null) {
             token = System.getenv("LIBRATO_TOKEN");
         }
-
-        LibratoReporter.Builder builder = LibratoReporter.builder(registry, username, token, source)
-                .setRateUnit(getRateUnit())
-                .setDurationUnit(getDurationUnit())
-                .setFilter(getFilter());
+        ReporterBuilder builder = LibratoReporter.builder(registry, username, token);
+        builder.setRateUnit(getRateUnit());
+        builder.setDurationUnit(getDurationUnit());
+        builder.setFilter(getFilter());
+        builder.setSource(source);
+        if (tagging != null && tagging.enabled) {
+            log.info("Tagging is enabled");
+            builder.setEnableTagging(true);
+            for (String name : tagging.staticTags.keySet()) {
+                String value = tagging.staticTags.get(name);
+                if (value != null && value.length() > 0) {
+                    builder.addTag(name, value);
+                }
+                builder.addTag(name, value);
+            }
+            for (String name : tagging.environmentTags.keySet()) {
+                String value = System.getenv(tagging.environmentTags.get(name));
+                if (value != null && value.length() > 0) {
+                    builder.addTag(name, value);
+                }
+            }
+        } else {
+            builder.setEnableTagging(false);
+            log.info("Tagging is disabled");
+        }
+        if (enableLegacy) {
+            log.info("Legacy is enabled");
+            builder.setEnableLegacy(true);
+        } else {
+            log.info("Legacy is disabled");
+            builder.setEnableLegacy(false);
+        }
         if (sourceRegex != null) {
-            Pattern sourceRegexPattern = Pattern.compile(sourceRegex);
-            builder.setSourceRegex(sourceRegexPattern);
-        }
-        if (libratoUrl != null) {
-            HttpPoster httpPoster = NingHttpPoster.newPoster(username, token, libratoUrl);
-            builder.setHttpPoster(httpPoster);
-        }
-        if (prefix != null) {
-            builder.setPrefix(prefix);
+            builder.setSourceRegex(sourceRegex);
         }
         if (name != null) {
             builder.setName(name);
         }
-        if (timeout != null) {
-            builder.setTimeout(timeout, TimeUnit.SECONDS);
+        if (libratoUrl != null) {
+            builder.setUrl(libratoUrl);
+        }
+        if (prefix != null) {
+            builder.setPrefix(prefix);
         }
         if (prefixDelimiter != null) {
-            builder.setPrefix(prefixDelimiter);
+            builder.setPrefixDelimiter(prefixDelimiter);
+        }
+        if (timeout != null) {
+            builder.setTimeout(timeout, TimeUnit.SECONDS);
         }
         if (deleteIdleStats != null) {
             builder.setDeleteIdleStats(deleteIdleStats);
@@ -116,33 +147,34 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         } else {
             try {
                 if (!metricWhitelist.isEmpty()) {
-                    Set<LibratoReporter.ExpandedMetric> expandedWhitelist = toExpandedMetric(metricWhitelist);
-                    builder.setExpansionConfig(new LibratoReporter.MetricExpansionConfig(expandedWhitelist));
+                    Set<ExpandedMetric> expandedWhitelist = toExpandedMetric(metricWhitelist);
+                    builder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
                     log.info("Set metric whitelist to {}", expandedWhitelist);
                 } else if (!metricBlacklist.isEmpty()) {
-                    EnumSet<LibratoReporter.ExpandedMetric> all = EnumSet.allOf(LibratoReporter.ExpandedMetric.class);
-                    Set<LibratoReporter.ExpandedMetric> expandedBlacklist = toExpandedMetric(metricBlacklist);
-                    Set<LibratoReporter.ExpandedMetric> expandedWhitelist = new HashSet<LibratoReporter.ExpandedMetric>();
-                    for (LibratoReporter.ExpandedMetric metric : all) {
+                    EnumSet<ExpandedMetric> all = EnumSet.allOf(ExpandedMetric.class);
+                    Set<ExpandedMetric> expandedBlacklist = toExpandedMetric(metricBlacklist);
+                    Set<ExpandedMetric> expandedWhitelist = new HashSet<ExpandedMetric>();
+                    for (ExpandedMetric metric : all) {
                         if (!expandedBlacklist.contains(metric)) {
                             expandedWhitelist.add(metric);
                         }
                     }
-                    builder.setExpansionConfig(new LibratoReporter.MetricExpansionConfig(expandedWhitelist));
+                    builder.setExpansionConfig(new MetricExpansionConfig(expandedWhitelist));
                     log.info("Set metric whitelist to {}", expandedWhitelist);
                 }
             } catch (Exception e) {
                 log.error("Could not process whitelist / blacklist", e);
             }
         }
+
         return builder.build();
     }
 
-    private Set<LibratoReporter.ExpandedMetric> toExpandedMetric(List<String> names) {
-        Set<LibratoReporter.ExpandedMetric> result = new HashSet<LibratoReporter.ExpandedMetric>();
+    private Set<ExpandedMetric> toExpandedMetric(List<String> names) {
+        Set<ExpandedMetric> result = new HashSet<ExpandedMetric>();
         for (String name : names) {
             name = name.toUpperCase();
-            result.add(LibratoReporter.ExpandedMetric.valueOf(name));
+            result.add(ExpandedMetric.valueOf(name));
         }
         return result;
     }
