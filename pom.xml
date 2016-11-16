@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.librato.metrics</groupId>
     <artifactId>dropwizard-metrics-librato</artifactId>
-    <version>1.7.0.13-TAGGING</version>
+    <version>1.7.0.13-SNAPSHOT</version>
     <name>Metrics Librato Dropwizard Support</name>
     <url>https://github.com/librato/dropwizard-librato</url>
     <licenses>
@@ -23,7 +23,7 @@
     </description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <metrics.librato.version>4.1.2.6-SNAPSHOT</metrics.librato.version>
+        <metrics.librato.version>5.0.0-SNAPSHOT</metrics.librato.version>
         <dropwizard.metrics.version>0.7.0</dropwizard.metrics.version>
     </properties>
     <scm>
