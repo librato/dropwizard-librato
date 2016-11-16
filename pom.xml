@@ -8,12 +8,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.librato.metrics</groupId>
     <artifactId>dropwizard-metrics-librato</artifactId>
-    <version>1.0.3.1-SNAPSHOT</version>
+    <version>10.1.0.3-SNAPSHOT</version>
     <name>Metrics Librato Dropwizard Support</name>
     <url>https://github.com/librato/dropwizard-librato</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <metrics.librato.version>4.1.2.5</metrics.librato.version>
+        <metrics.librato.version>5.0.0</metrics.librato.version>
         <dropwizard.metrics.version>1.0.3</dropwizard.metrics.version>
     </properties>
     <licenses>
