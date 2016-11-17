@@ -51,6 +51,12 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     private Boolean deleteIdleStats;
 
     @JsonProperty
+    private Boolean enableLegacy = true;
+
+    @JsonProperty("tags")
+    private Tagging tagging = new Tagging();
+
+    @JsonProperty
     @NotNull
     private Optional<Duration> frequency = Optional.of(Duration.seconds(60));
 
@@ -113,9 +119,6 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         } else {
             log.info("Legacy is disabled");
             builder.setEnableLegacy(false);
-        }
-        if (source != null) {
-            builder.setSource(source);
         }
         if (sourceRegex != null) {
             builder.setSourceRegex(sourceRegex);
