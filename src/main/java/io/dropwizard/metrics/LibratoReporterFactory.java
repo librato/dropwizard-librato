@@ -82,10 +82,38 @@ public class LibratoReporterFactory extends BaseReporterFactory {
         if (token == null) {
             token = System.getenv("LIBRATO_TOKEN");
         }
-        ReporterBuilder builder = LibratoReporter.builder(registry, username, token)
-                .setRateUnit(getRateUnit())
-                .setDurationUnit(getDurationUnit())
-                .setFilter(getFilter());
+        ReporterBuilder builder = LibratoReporter.builder(registry, username, token);
+        builder.setRateUnit(getRateUnit());
+        builder.setDurationUnit(getDurationUnit());
+        builder.setFilter(getFilter());
+        builder.setSource(source);
+        if (tagging != null && tagging.enabled) {
+            log.info("Tagging is enabled");
+            builder.setEnableTagging(true);
+            for (String name : tagging.staticTags.keySet()) {
+                String value = tagging.staticTags.get(name);
+                if (value != null && value.length() > 0) {
+                    builder.addTag(name, value);
+                }
+                builder.addTag(name, value);
+            }
+            for (String name : tagging.environmentTags.keySet()) {
+                String value = System.getenv(tagging.environmentTags.get(name));
+                if (value != null && value.length() > 0) {
+                    builder.addTag(name, value);
+                }
+            }
+        } else {
+            builder.setEnableTagging(false);
+            log.info("Tagging is disabled");
+        }
+        if (enableLegacy) {
+            log.info("Legacy is enabled");
+            builder.setEnableLegacy(true);
+        } else {
+            log.info("Legacy is disabled");
+            builder.setEnableLegacy(false);
+        }
         if (source != null) {
             builder.setSource(source);
         }
