@@ -63,6 +63,33 @@ If you wish to not have your username, token, or source in the configuration,
 you can alternatively supply them by setting the `LIBRATO_USERNAME`,
 `LIBRATO_TOKEN`, and `LIBRATO_SOURCE` environment variables, respectively
 
+## Tagging Support
+
+If you'd like to participate in our tagging beta, please email support@librato.com to be
+added.  Once this is done, you may update your yaml file:
+
+    metrics:
+      reporters:
+        - type: librato
+          username: "<Librato Email>"
+          token: "<Librato API Token>"
+          source: "<Source Identifier (usually hostname)>"
+          timeout: [optional (int), number of seconds, defaults to 5]
+          prefix: [optional (string), prepended to metric names]
+          name: [optional (string), name of the reporter]
+          tags:
+            enabled: true
+            static:
+                service: "my-auth-service"
+                environment: "staging"
+            environment:
+                node: NODE_NAME
+
+The static tags are completely defined in the yaml file.  The environment tags' names are also
+defined in the yaml file, but their values are determined by the environment variables at the
+time the Librato reporter is created.  In this case, the environment variable with the name 
+`NODE_NAME` would be queried and then assigned to the tag name `node`.
+
 ## Whitelist / Blacklist
 
 By default, all expanded metrics (percentiles, rates) are submitted for each Timer, Histogram,
