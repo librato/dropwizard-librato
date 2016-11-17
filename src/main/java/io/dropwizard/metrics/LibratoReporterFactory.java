@@ -121,7 +121,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
                 } else if (!metricBlacklist.isEmpty()) {
                     EnumSet<ExpandedMetric> all = EnumSet.allOf(ExpandedMetric.class);
                     Set<ExpandedMetric> expandedBlacklist = toExpandedMetric(metricBlacklist);
-                    Set<ExpandedMetric> expandedWhitelist = new HashSet<ExpandedMetric>();
+                    Set<ExpandedMetric> expandedWhitelist = new HashSet<>();
                     for (ExpandedMetric metric : all) {
                         if (!expandedBlacklist.contains(metric)) {
                             expandedWhitelist.add(metric);
@@ -138,7 +138,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     }
 
     private Set<ExpandedMetric> toExpandedMetric(List<String> names) {
-        Set<ExpandedMetric> result = new HashSet<ExpandedMetric>();
+        Set<ExpandedMetric> result = new HashSet<>();
         for (String name : names) {
             name = name.toUpperCase();
             result.add(ExpandedMetric.valueOf(name));
