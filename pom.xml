@@ -97,6 +97,7 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-metrics</artifactId>
             <version>${dropwizard.metrics.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.librato.metrics</groupId>
