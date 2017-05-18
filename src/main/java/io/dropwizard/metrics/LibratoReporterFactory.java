@@ -2,10 +2,13 @@ package io.dropwizard.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.librato.metrics.reporter.ExpandedMetric;
 import com.librato.metrics.reporter.LibratoReporter;
 import com.librato.metrics.reporter.MetricExpansionConfig;
 import com.librato.metrics.reporter.ReporterBuilder;
+import io.dropwizard.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

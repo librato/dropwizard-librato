@@ -13,8 +13,8 @@
     <url>https://github.com/librato/dropwizard-librato</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <metrics.librato.version>5.1.0-SNAPSHOT</metrics.librato.version>
-        <dropwizard.metrics.version>3.1.2</dropwizard.metrics.version>
+        <metrics.librato.version>5.1.0</metrics.librato.version>
+        <dropwizard.metrics.version>1.0.3</dropwizard.metrics.version>
     </properties>
     <licenses>
         <license>
@@ -103,8 +103,8 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-metrics</artifactId>
             <version>${dropwizard.metrics.version}</version>
             <scope>provided</scope>
         </dependency>
