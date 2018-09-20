@@ -15,7 +15,7 @@ First, add the `dropwizard-metrics-librato` dependency in your POM:
     <dependency>
         <groupId>com.librato.metrics</groupId>
         <artifactId>dropwizard-metrics-librato</artifactId>
-        <version>10.2.0.3</version>
+        <version>10.2.0.4</version>
     </dependency>
 
 ### For earlier than Dropwizard 1.x
