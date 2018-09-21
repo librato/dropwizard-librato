@@ -1,0 +1,2 @@
+io.dropwizard.metrics.DefaultPosterFactory
+io.dropwizard.metrics.OkHttpPosterFactory
