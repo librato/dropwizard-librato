@@ -4,7 +4,6 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.librato.metrics.client.IPoster;
 import com.librato.metrics.reporter.ExpandedMetric;
 import com.librato.metrics.reporter.LibratoReporter;
 import com.librato.metrics.reporter.MetricExpansionConfig;
@@ -52,7 +51,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
     private Boolean deleteIdleStats;
 
     @JsonProperty
-    private IPoster poster;
+    private PosterFactory poster;
 
     @JsonProperty
     private Boolean enableLegacy = true;
@@ -146,7 +145,7 @@ public class LibratoReporterFactory extends BaseReporterFactory {
             builder.setDeleteIdleStats(deleteIdleStats);
         }
         if (poster != null) {
-            builder.setPoster(poster);
+            builder.setPoster(poster.createPoster());
         }
         if (!metricWhitelist.isEmpty() && !metricBlacklist.isEmpty()) {
             log.error("Both whitelist and blacklist cannot be supplied");
