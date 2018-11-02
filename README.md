@@ -1,3 +1,5 @@
+**DEPRECATED:** If you are using [AppOptics](https://www.appoptics.com) please refer to [dropwizard-metrics-appoptics](https://github.com/appoptics/dropwizard-metrics-appoptics).
+
 ## Overview
 
 This project provides an easy way to send metrics from your Dropwizard project to Librato.  It automatically includes the <a href="https://github.com/librato/metrics-librato">metrics-librato</a> library and sets up the reporter based on your application YAML config.  For more information on how you can use <a href="https://github.com/librato/metrics-librato">metrics-librato</a> at runtime, please see some <a href="https://github.com/librato/metrics-librato#fluent-helper">example usages</a>.
